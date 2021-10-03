@@ -20,8 +20,9 @@ module.exports = {
         sans: ['Wotfard', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.teal,
-        gray: colors.trueGray,
+        primary: colors.amber,
+        secondary: colors.sky,
+        gray: colors.warmGray,
       },
       typography: (theme) => ({
         DEFAULT: {

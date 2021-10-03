@@ -4,7 +4,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
-
+import Image from 'next/image'
 import NewsletterForm from '@/components/NewsletterForm'
 
 const MAX_DISPLAY = 5
@@ -19,16 +19,27 @@ export default function Home({ posts }) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="pt-6 pb-8 space-y-2 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-4xl md:leading-14">
+      <Image
+        alt=""
+        src="/static/images/bg03@2x.jpg"
+        layout="responsive"
+        width={4000}
+        height={1772}
+        className="z-0"
+      />
+      <div className="divide-y divide-gray-200 dark:divide-gray-700 relative z-10">
+        <div className="pt-6 pb-8 space-y-2 md:space-y-5 z-10">
+          <h1
+            className="text-3xl text-gray-900 dark:text-gray-100 sm:text-4xl md:text-6xl md:leading-14"
+            style={{ fontFamily: 'Megrim' }}
+          >
             Articles
           </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400 font-serif">
+          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
             {siteMetadata.description}
           </p>
         </div>
-        <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+        <ul className="divide-y divide-gray-200 dark:divide-gray-700 z-10">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
             const { slug, date, title, summary, tags } = frontMatter

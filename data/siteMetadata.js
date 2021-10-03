@@ -7,7 +7,7 @@ const siteMetadata = {
   siteUrl: 'https://iankduncan.com',
   siteRepo: 'https://github.com/iand675/ikdv2',
   siteLogo: '/static/images/logo.png',
-  image: '/static/images/avatar.png',
+  image: '/static/images/avatar.jpeg',
   socialBanner: '/static/images/twitter-card.png',
   email: 'ian@iankduncan.com',
   github: 'https://github.com/iand675',

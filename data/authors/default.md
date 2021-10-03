@@ -1,6 +1,6 @@
 ---
 name: Ian Duncan
-avatar: /static/images/avatar.png
+avatar: /static/images/avatar.jpeg
 occupation: Software Engineer
 company: Mercury Technologies
 email: ian@iankduncan.com
