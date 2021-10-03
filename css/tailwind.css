@@ -15,3 +15,136 @@ input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition: background-color 600000s 0s, color 600000s 0s;
 }
+
+/* extralight */
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 100;
+  font-style: normal;
+  src: url('/static/fonts/wotfard/wotfard-extralight.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-extralight.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-extralight.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 100;
+  font-style: italic;
+  src: url('/static/fonts/wotfard/wotfard-extralightitalic.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-extralightitalic.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-extralightitalic.ttf') format('truetype');
+}
+
+/* light */
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 200;
+  font-style: normal;
+  src: url('/static/fonts/wotfard/wotfard-light.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-light.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 200;
+  font-style: italic;
+  src: url('/static/fonts/wotfard/wotfard-lightitalic.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-lightitalic.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-lightitalic.ttf') format('truetype');
+}
+
+/* thin */
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 300;
+  font-style: normal;
+  src: url('/static/fonts/wotfard/wotfard-thin.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-thin.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-thin.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 300;
+  font-style: italic;
+  src: url('/static/fonts/wotfard/wotfard-thinitalic.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-thinitalic.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-thinitalic.ttf') format('truetype');
+}
+
+/* regular */
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/static/fonts/wotfard/wotfard-regular.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-regular.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 400;
+  font-style: italic;
+  src: url('/static/fonts/wotfard/wotfard-regularitalic.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-regularitalic.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-regularitalic.ttf') format('truetype');
+}
+
+/* medium */
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 500;
+  font-style: normal;
+  src: url('/static/fonts/wotfard/wotfard-medium.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-medium.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 500;
+  font-style: italic;
+  src: url('/static/fonts/wotfard/wotfard-mediumitalic.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-mediumitalic.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-mediumitalic.ttf') format('truetype');
+}
+
+/* semibold */
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 600;
+  font-style: normal;
+  src: url('/static/fonts/wotfard/wotfard-semibold.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-semibold.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-semibold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 600;
+  font-style: italic;
+  src: url('/static/fonts/wotfard/wotfard-semibolditalic.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-semibolditalic.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-semibolditalic.ttf') format('truetype');
+}
+
+/* bold */
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/static/fonts/wotfard/wotfard-bold.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-bold.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  font-weight: 700;
+  font-style: italic;
+  src: url('/static/fonts/wotfard/wotfard-bolditalic.woff2') format('woff2'),
+    url('/static/fonts/wotfard/wotfard-bolditalic.woff') format('woff'),
+    url('/static/fonts/wotfard/wotfard-bolditalic.ttf') format('truetype');
+}
