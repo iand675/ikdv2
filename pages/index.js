@@ -29,10 +29,7 @@ export default function Home({ posts }) {
       />
       <div className="divide-y divide-gray-200 dark:divide-gray-700 relative z-10">
         <div className="pt-6 pb-8 space-y-2 md:space-y-5 z-10">
-          <h1
-            className="text-3xl text-gray-900 dark:text-gray-100 sm:text-4xl md:text-6xl md:leading-14"
-            style={{ fontFamily: 'Megrim' }}
-          >
+          <h1 className="font-header text-3xl text-gray-900 dark:text-gray-100 sm:text-4xl md:text-6xl md:leading-14">
             Articles
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">

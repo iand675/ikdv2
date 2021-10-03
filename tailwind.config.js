@@ -18,6 +18,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Wotfard', ...defaultTheme.fontFamily.sans],
+        mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
+        header: ['Megrim', ...defaultTheme.fontFamily.serif],
       },
       colors: {
         primary: colors.amber,
@@ -53,8 +55,8 @@ module.exports = {
               color: theme('colors.gray.900'),
             },
             code: {
-              color: theme('colors.pink.500'),
-              backgroundColor: theme('colors.gray.100'),
+              color: theme('colors.secondary.200'),
+              backgroundColor: theme('colors.secondary.700'),
               paddingLeft: '4px',
               paddingRight: '4px',
               paddingTop: '2px',
