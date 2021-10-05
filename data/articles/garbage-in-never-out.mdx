@@ -24,7 +24,7 @@ we set up periodic restarts of the workers to keep asyncronous task throughput u
 For context: Haskell's compiler, GHC, uses a mark and compact garbage collection algorithm by default.
 The Haskell garbage collector is implemented in a stop-the-world fashion: user threads are paused by the GHC runtime system while the garbage collector scans the heap. In order
 to perform garbage collection, the runtime system must scan all live data in the heap. Thus, as the size of the heap grows, the slower the Haskell process is able to run due to
-more time spent perform garbage collection. Memory leaks in a long-running Haskell not only use RAM, but they slow down user code more and more as time goes by.
+more time spent perform garbage collection. Memory leaks in a long-running Haskell not only use RAM, but they slow down user code more and more as time goes by.[^gc]
 
 _TODO: Space leaks tend to be an issue that new Haskell programmers run into as they learn the ins and outs of lazy functional programming, something something ..._
 
@@ -38,13 +38,13 @@ the instrumentation in place to ensure that our queuing sytems behaved as they w
 So where did all the memory go? For tracking metrics at Mercury, we use Prometheus and Grafana due to **reasons**. One of the primary metric
 types it offers is [summaries](https://prometheus.io/docs/concepts/metric_types/#summary), which emits multiple time series values:
 
-- Streaming quantiles[^woo]
+- Streaming quantiles
 - Total sum all observed values
 - Count of observed events
 
 **TODO blurb about why engineers use percentiles, streaming quantiles are why we use them, can't keep normal quantiles in memory**
 
-The existing prometheus client libraries in most languages tend to implement an algorithm often referred to as the CKMS Streaming Quantile algorithm[^1],
+The existing prometheus client libraries in most languages tend to implement an algorithm often referred to as the CKMS Streaming Quantile algorithm[^originalpaper],
 and the `prometheus-client` Haskell library prior to our changes was no exception. The original CKMS paper provides multiple variants,
 the one typically used for Prometheus clients is the "targeted quantiles" variant, which we discovered to be broken when fed (after examining CKMS implementations
 in other languages) for adversarial inputs.
@@ -81,8 +81,8 @@ postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",statu
 postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",status="200",quantile="0.99"} 22.0
 ```
 
-We contacted the authors of the paper, and Graham Cormode provided us with a link to the latest work in this line, and thankfully it also had publicly available code under the Apache foundation.
-We ported over the ReqSketch implementation to Haskell and have it published as a package on Hackage[^3].
+We contacted the authors of the paper, and Graham Cormode provided us with a link to the latest work in this line[^followuppaper], and thankfully it also had publicly available code under the Apache foundation.
+We ported over the ReqSketch implementation to Haskell and have it published as a package on Hackage[^hackage].
 
 Benchmarks in the general case (ReqSketch/insert/mvar) vs (Prometheus/insert/existing) show dramatic performance increases (~257x) over the existing Prometheus code.
 
@@ -106,8 +106,9 @@ We also tested against our workers locally with the new algorithm, and we're see
 
 ![Fixed heap profile](https://user-images.githubusercontent.com/69209/130644982-87a5fbe7-1511-4633-b10e-65444299047b.png)
 
-[^1]: [Effective Computation of Biased Quantiles over Data Streams](http://dimacs.rutgers.edu/~graham/pubs/papers/bquant-icde.pdf)
-[^2]: [Relative Error Streaming Quantiles](https://arxiv.org/abs/2004.01668)
-[^3]: Apache [DataSketches library](https://datasketches.apache.org/)
-[^4]: [data-sketeches Hackage package](https://hackage.haskell.org/package/data-sketches)
-[^woo]: It's not the same algorithm as CKMS, but an earleir algorithm, GK, has a similar intuition about maintaining range invariants as a mechanism to compress stream inputs. [This site](http://www.mathcs.emory.edu/~cheung/Courses/584/Syllabus/08-Quantile/Greenwald.html) has a good explanation of how it works.
+[^originalpaper]: [Effective Computation of Biased Quantiles over Data Streams](http://dimacs.rutgers.edu/~graham/pubs/papers/bquant-icde.pdf)
+[^followuppaper]: [Relative Error Streaming Quantiles](https://arxiv.org/abs/2004.01668)
+[^datasketches]: Apache [DataSketches library](https://datasketches.apache.org/)
+[^hackage]: [data-sketeches Hackage package](https://hackage.haskell.org/package/data-sketches)
+[^gktutorial]: It's not the same algorithm as CKMS, but an earleir algorithm, GK, has a similar intuition about maintaining range invariants as a mechanism to compress stream inputs. [This site](http://www.mathcs.emory.edu/~cheung/Courses/584/Syllabus/08-Quantile/Greenwald.html) has a good explanation of how it works.
+[^gc]: Channable has a [great writeup](https://www.channable.com/tech/lessons-in-managing-haskell-memory) on Haskell's garbage collection mechanism.
