@@ -1,0 +1,113 @@
+---
+title: Garbage in, Never out
+date: '2021-10-04'
+tags: ['haskell']
+draft: false
+summary: Adventures in streaming algorithms.
+images: []
+layout: PostLayout
+---
+
+Mercury's engineering prides itself on keeping infrastructure as simple as possible, for as long as possible. One particular system we've developed
+is called Postgresque, a queuing system that leverages PostgreSQL which we use to process asynchronous work. From this queuing system, we have a set
+of workers that pull jobs from the queue and process them in a timely fashion. On the whole, this has worked well for our needs– Traditional banking
+industry infrastructure, runs relatively slowly, so we're optimizing for stability and fewer moving parts rather than maximum throughput.
+
+That's not to say that throughput doesn't matter– as Mercury's traffic and number of processed payments increased, we recently noticed ongoing slowdowns
+in our worker processes the longer they ran. Many engineers consider using PostgreSQL as a queuing mechanism to be an antipattern, or at the very least, a footgun. I'll confess
+that as we observed our workers crawl to a halt periodically, I suspected the same thing. However, we spent some time optimizing the SQL queries and minimizing queue contention,
+and in the end we still continued to observe ongoing slowdowns.
+
+One peculiarity of the gradual slowdowns that we noticed was that the workers would process jobs significantly faster after a fresh deployment. As a stopgap,
+we set up periodic restarts of the workers to keep asyncronous task throughput under control, but this also pointed a rather different category of problem: memory leaks 😱
+
+For context: Haskell's compiler, GHC, uses a mark and compact garbage collection algorithm by default.
+The Haskell garbage collector is implemented in a stop-the-world fashion: user threads are paused by the GHC runtime system while the garbage collector scans the heap. In order
+to perform garbage collection, the runtime system must scan all live data in the heap. Thus, as the size of the heap grows, the slower the Haskell process is able to run due to
+more time spent perform garbage collection. Memory leaks in a long-running Haskell not only use RAM, but they slow down user code more and more as time goes by.
+
+{/_ Space leaks tend to be an issue that new Haskell programmers run into as they learn the ins and outs of lazy functional programming, something something ... _/}
+
+Starting with this context as a jumping off point, we profiled running 100,000 no-op tasks to see what, if anything, was eating memory:
+
+![Adversarial input heap profile](https://user-images.githubusercontent.com/69209/130689107-11612e43-e7a7-4cad-8262-09ed8f951ab9.png)
+
+Further digging into heap profiling cost centers (not shown here) surfaced a curious culprit... our metrics library? In an unfortunate turn of events,
+the instrumentation in place to ensure that our queuing sytems behaved as they were supposed to turned out to be the code that leaked memory.
+
+So where did all the memory go? For tracking metrics at Mercury, we use Prometheus and Grafana due to **reasons**. One of the primary metric
+types it offers is [summaries](https://prometheus.io/docs/concepts/metric_types/#summary), which emits multiple time series values:
+
+- Streaming quantiles[^woo]
+- Total sum all observed values
+- Count of observed events
+
+**TODO blurb about why engineers use percentiles, streaming quantiles are why we use them, can't keep normal quantiles in memory**
+
+The existing prometheus client libraries in most languages tend to implement an algorithm often referred to as the CKMS Streaming Quantile algorithm[^1],
+and the `prometheus-client` Haskell library prior to our changes was no exception. The original CKMS paper provides multiple variants,
+the one typically used for Prometheus clients is the "targeted quantiles" variant, which we discovered to be broken when fed (after examining CKMS implementations
+in other languages) for adversarial inputs.
+
+What counts as an "adversarial input"? We discovered
+
+```haskell
+
+data Metrics = Metrics
+  { ...
+  , postgresTransactionCount :: Prometheus.Vector (Text {- ^ endpoint -}, Text {- ^ method -}, Text {- ^ status -}) Summary
+  }
+
+-- | Attempt to dequeue a job
+tryDequeue :: (MonadUnliftIO m, HasApp m, MonadMonitor m) => m (Maybe (Entity QueuedJob))
+tryDequeue = do
+  start <- getStartTime
+
+  job <- genericRunDB tryDequeueSelectJob
+
+  elapsed <- getElapsedSeconds start
+  Metrics {..} <- getMetrics
+  observe postgresqueDequeueSeconds elapsed
+  case queuedJobName . entityVal <$> job of
+    Nothing -> pure () -- If we didn't dequeue anything, ignore this metric
+    Just jobName -> withLabel postgresqueJobDequeueSeconds jobName (`observe` elapsed)
+
+  pure job
+```
+
+```prometheus
+postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",status="200",quantile="0.5"} 22.0
+postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",status="200",quantile="0.9"} 22.0
+postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",status="200",quantile="0.99"} 22.0
+```
+
+We contacted the authors of the paper, and Graham Cormode provided us with a link to the latest work in this line, and thankfully it also had publicly available code under the Apache foundation.
+We ported over the ReqSketch implementation to Haskell and have it published as a package on Hackage[^3].
+
+Benchmarks in the general case (ReqSketch/insert/mvar) vs (Prometheus/insert/existing) show dramatic performance increases (~257x) over the existing Prometheus code.
+
+![Benchmarks screenshot](https://user-images.githubusercontent.com/69209/130644037-dc5284fb-2552-479c-8334-0901c142a067.png)
+
+We also ran tests to ensure sublinear growth, and in the adversarial case of repeated inserts of the same value, we are seeing the desired behaviour for the new implementation:
+
+```haskell
+sk <- mkReqSketch 6 HighRanksAreAccurate
+replicateM_ 100_000_000 (insert sk 1)
+print =<< getRetainedItems
+```
+
+Returns
+
+```
+937
+```
+
+We also tested against our workers locally with the new algorithm, and we're seeing consistent garbage collection / memory usage when processing 100k webhooks. To be clear, this is the same workload as the graph posted above, the only difference is the usage of the new quantile estimation algorithm.
+
+![Fixed heap profile](https://user-images.githubusercontent.com/69209/130644982-87a5fbe7-1511-4633-b10e-65444299047b.png)
+
+[^1]: [Effective Computation of Biased Quantiles over Data Streams](http://dimacs.rutgers.edu/~graham/pubs/papers/bquant-icde.pdf)
+[^2]: [Relative Error Streaming Quantiles](https://arxiv.org/abs/2004.01668)
+[^3]: Apache [DataSketches library](https://datasketches.apache.org/)
+[^4]: [data-sketeches Hackage package](https://hackage.haskell.org/package/data-sketches)
+[^woo]: It's not the same algorithm as CKMS, but an earleir algorithm, GK, has a similar intuition about maintaining range invariants as a mechanism to compress stream inputs. [This site](http://www.mathcs.emory.edu/~cheung/Courses/584/Syllabus/08-Quantile/Greenwald.html) has a good explanation of how it works.
