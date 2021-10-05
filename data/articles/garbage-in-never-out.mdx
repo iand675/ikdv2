@@ -26,7 +26,7 @@ The Haskell garbage collector is implemented in a stop-the-world fashion: user t
 to perform garbage collection, the runtime system must scan all live data in the heap. Thus, as the size of the heap grows, the slower the Haskell process is able to run due to
 more time spent perform garbage collection. Memory leaks in a long-running Haskell not only use RAM, but they slow down user code more and more as time goes by.
 
-{/_ Space leaks tend to be an issue that new Haskell programmers run into as they learn the ins and outs of lazy functional programming, something something ... _/}
+_TODO: Space leaks tend to be an issue that new Haskell programmers run into as they learn the ins and outs of lazy functional programming, something something ..._
 
 Starting with this context as a jumping off point, we profiled running 100,000 no-op tasks to see what, if anything, was eating memory:
 
