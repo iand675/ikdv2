@@ -49,7 +49,7 @@ and the `prometheus-client` Haskell library prior to our changes was no exceptio
 the one typically used for Prometheus clients is the "targeted quantiles" variant, which we discovered to be broken when fed (after examining CKMS implementations
 in other languages) for adversarial inputs.
 
-What counts as an "adversarial input"? We discovered
+What counts as an "adversarial input"? We discovered that observing the same values repeatedly, or observing monotonically increasing/decreasing values led to linear memory usage:
 
 ```haskell
 
