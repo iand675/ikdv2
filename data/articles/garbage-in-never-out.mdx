@@ -53,33 +53,18 @@ What counts as an "adversarial input"? We discovered that observing the same val
 
 ```haskell
 
-data Metrics = Metrics
-  { ...
-  , postgresTransactionCount :: Prometheus.Vector (Text {- ^ endpoint -}, Text {- ^ method -}, Text {- ^ status -}) Summary
-  }
+:l Prometheus.Metric.Summary
+e = Estimator 0 0 defaultQuantiles []
+e' = foldl (flip insert) e $ take 100000 [1,1..]
+length $ estItems $ compress e'
+```
+Returns
 
--- | Attempt to dequeue a job
-tryDequeue :: (MonadUnliftIO m, HasApp m, MonadMonitor m) => m (Maybe (Entity QueuedJob))
-tryDequeue = do
-  start <- getStartTime
-
-  job <- genericRunDB tryDequeueSelectJob
-
-  elapsed <- getElapsedSeconds start
-  Metrics {..} <- getMetrics
-  observe postgresqueDequeueSeconds elapsed
-  case queuedJobName . entityVal <$> job of
-    Nothing -> pure () -- If we didn't dequeue anything, ignore this metric
-    Just jobName -> withLabel postgresqueJobDequeueSeconds jobName (`observe` elapsed)
-
-  pure job
+```
+100000
 ```
 
-```prometheus
-postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",status="200",quantile="0.5"} 22.0
-postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",status="200",quantile="0.9"} 22.0
-postgres_transaction_count{endpoint="CreateCheckingAccountR",method="POST",status="200",quantile="0.99"} 22.0
-```
+An `Estimator` is the internal data structure used by summaries to track the observed data points. In the above code, we observe the value 1, 100k times. We then get the length of the retained items after we do a `compress`, which _should_ eliminate any unecessary values.
 
 We contacted the authors of the paper, and Graham Cormode provided us with a link to the latest work in this line[^followuppaper], and thankfully it also had publicly available code under the Apache foundation.
 We ported over the ReqSketch implementation to Haskell and have it published as a package on Hackage[^hackage].
