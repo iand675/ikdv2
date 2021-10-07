@@ -54,8 +54,8 @@ What counts as an "adversarial input"? We discovered that observing the same val
 ```haskell
 
 :l Prometheus.Metric.Summary
-e = Estimator 0 0 defaultQuantiles []
-e' = foldl (flip insert) e $ take 100000 [1,1..]
+e = emptyEstimator defaultQuantiles
+e' = foldl (flip insert) e $ take 100_000 [1,1..]
 length $ estItems $ compress e'
 ```
 Returns
