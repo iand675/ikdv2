@@ -1021,10 +1021,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
-"@mailchimp/mailchimp_marketing@^3.0.71":
-  version "3.0.71"
-  resolved "https://registry.yarnpkg.com/@mailchimp/mailchimp_marketing/-/mailchimp_marketing-3.0.71.tgz#0e1dbcff7c1a6384b72f4f045323e04bcab450b6"
-  integrity sha512-/01v4q3EJ77ILklc7iLELzsQaiRdY3qcpkU+gh5ZwhCv1LpueU4nK/5yPCU+ro8WcHi4uRi8A6q8cGdRE1j8tg==
+"@mailchimp/mailchimp_marketing@^3.0.73":
+  version "3.0.73"
+  resolved "https://registry.yarnpkg.com/@mailchimp/mailchimp_marketing/-/mailchimp_marketing-3.0.73.tgz#f29def461ce32ad7afec3bc5b030d3d20820deb5"
+  integrity sha512-pWHsGio2mS1eYe44ZlNNgukQXfclE0T650sfmqyIK8wUqjoyRwy+b6ZJCrhUCxlEKLBQyHwCcxK90wyfTetqVA==
   dependencies:
     dotenv "^8.2.0"
     superagent "3.8.1"
@@ -1034,10 +1034,10 @@
   resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
   integrity sha512-jDJTpta+P4p1NZTFVLHJ/TLFVYVcOqv6l8xwOeBKNPMgY/zDYH/YH7SJbvrr/h1RcS9GzbPcLKGzpuK9cV56UA==
 
-"@next/bundle-analyzer@12.0.3":
-  version "12.0.3"
-  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-12.0.3.tgz#a7f63387f2fde8f6554d8616b5a738ca803a1090"
-  integrity sha512-gvQC91wIG2/YQvC7nEiPJOegXaqViNHjizaQZ6njljdCn2R74MpnJuBqwYkT1WKSj3xxgoq9rOLKY0jN04oiCQ==
+"@next/bundle-analyzer@12.0.8":
+  version "12.0.8"
+  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-12.0.8.tgz#a4fef1b14f8a4a87c09d97a3d909deddc88d12f8"
+  integrity sha512-tRwFyAkJA0h+rwt4exq31T59qo4qwp7vPoR3yC8gIpK/E5NAwafyk40aNpk4OWhiQ2IvJMFutukMzY3xl79NXA==
   dependencies:
     webpack-bundle-analyzer "4.3.0"
 
@@ -6744,10 +6744,10 @@ regjsparser@^0.7.0:
   dependencies:
     jsesc "~0.5.0"
 
-rehype-autolink-headings@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/rehype-autolink-headings/-/rehype-autolink-headings-6.1.0.tgz#9a06ae5446bfbe8148e0ed98329a566c4d7472e9"
-  integrity sha512-v8xnvhDtxc2jTgnhVlR2sG168TyNTK93Myx+uTzQNpNxzkRnQKz3hZQKoh7fxuOzJhCGa/z6qqZSPB2BOi/HRw==
+rehype-autolink-headings@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/rehype-autolink-headings/-/rehype-autolink-headings-6.1.1.tgz#0cb874a56f3de6ead1c2268d7f0fc5006f244db5"
+  integrity sha512-NMYzZIsHM3sA14nC5rAFuUPIOfg+DFmf9EY1YMhaNlB7+3kK/ZlE6kqPfuxr1tsJ1XWkTrMtMoyHosU70d35mA==
   dependencies:
     "@types/hast" "^2.0.0"
     extend "^3.0.0"
