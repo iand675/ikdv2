@@ -1021,10 +1021,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
-"@mailchimp/mailchimp_marketing@^3.0.71":
-  version "3.0.71"
-  resolved "https://registry.yarnpkg.com/@mailchimp/mailchimp_marketing/-/mailchimp_marketing-3.0.71.tgz#0e1dbcff7c1a6384b72f4f045323e04bcab450b6"
-  integrity sha512-/01v4q3EJ77ILklc7iLELzsQaiRdY3qcpkU+gh5ZwhCv1LpueU4nK/5yPCU+ro8WcHi4uRi8A6q8cGdRE1j8tg==
+"@mailchimp/mailchimp_marketing@^3.0.73":
+  version "3.0.73"
+  resolved "https://registry.yarnpkg.com/@mailchimp/mailchimp_marketing/-/mailchimp_marketing-3.0.73.tgz#f29def461ce32ad7afec3bc5b030d3d20820deb5"
+  integrity sha512-pWHsGio2mS1eYe44ZlNNgukQXfclE0T650sfmqyIK8wUqjoyRwy+b6ZJCrhUCxlEKLBQyHwCcxK90wyfTetqVA==
   dependencies:
     dotenv "^8.2.0"
     superagent "3.8.1"
