@@ -15,7 +15,7 @@ const LayoutWrapper = ({ children }) => {
             <Link href="/" aria-label="Ian Duncan's Blog">
               <div className="flex items-center justify-between" style={{ fontFamily: 'Megrim' }}>
                 {typeof siteMetadata.headerTitle === 'string' ? (
-                  <div className="hidden h-6 text-2xl font-semibold sm:block">
+                  <div className="hidden h-6 text-2xl font-semibold sm:block leading-none">
                     {siteMetadata.headerTitle}
                   </div>
                 ) : (
@@ -30,7 +30,7 @@ const LayoutWrapper = ({ children }) => {
                 <Link
                   key={link.title}
                   href={link.href}
-                  className="p-1 font-medium text-secondary-900 sm:p-4 dark:text-secondary-100"
+                  className="p-1 font-medium text-secondary-900 sm:p-4 dark:text-primary-500"
                 >
                   {link.title}
                 </Link>
